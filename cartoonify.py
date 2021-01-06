@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-total_color = 10 #k-means
+total_color = 5 #k-means
 max_iter = 20
 epsilon = 0.001
 
@@ -9,14 +9,16 @@ d = 50 # diameter of pixel neighborhood
 sigmaColor = 200
 sigmaSpace = 200
 
-blur_value = 13
-line_size = 251
+blur_value = 9
+line_size = 201
 
 def get_edges(img,line_size,blur_value):
     print('finding image edges')
-    gray_blur = cv2.medianBlur(img, 5)
+    gray_blur = img
+    #gray_blur = cv2.medianBlur(img, 21)
     edges = cv2.adaptiveThreshold(gray_blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, line_size, blur_value)
-    cv2.imwrite(f'gaussian_edge_line{line_size}_blur{blur_value}.png',edges)
+    #cv2.imwrite(f'edge_line{line_size}_blur{blur_value}.png',edges)
+    cv2.imwrite('edges.png',edges)
     return edges
 
 # effect is undesired color reduction
@@ -41,7 +43,6 @@ def main():
     img = cv2.imread(r'headshot.png')
 
     img_newcolor = color_quantization(img, total_color)
-    #img_newcolor = img
 
     #blurred = cv2.bilateralFilter(img_newcolor, d=d, sigmaColor=sigmaColor,sigmaSpace=sigmaSpace)
     blurred = cv2.medianBlur(img_newcolor,11)
